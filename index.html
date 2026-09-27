@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Service Booking System</title>
+    <!-- Linking the CSS file -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts for better typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="spinner-overlay hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Sub-Services Modal (New Feature) -->
+    <div id="sub-service-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeSubServiceModal()">&times;</span>
+            <h2 id="modal-title">Sub-Services</h2>
+            <div id="sub-services-list" class="sub-services-grid">
+                <!-- Dynamically filled by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">QuickServe</div>
+        <ul id="navbar-links">
+            <li><a href="#home" class="nav-link">Home</a></li>
+            <li><a href="#dashboard" class="nav-link">Dashboard</a></li>
+            <li id="user-info" class="hidden">Welcome, <span id="user-name"></span> | <a href="#" onclick="logoutUser()">Logout</a></li>
+            <li id="login-link"><a href="#auth-section" class="nav-link">Login/Signup</a></li>
+            <li><button id="theme-toggle" onclick="toggleDarkMode()">☀️ Mode</button></li>
+        </ul>
+    </nav>
+
+    <!-- Authentication Section -->
+    <section id="auth-section">
+        <div class="auth-container">
+            <!-- Login Form -->
+            <div id="login-form-div">
+                <h2>Login to QuickServe</h2>
+                <form id="login-form">
+                    <div class="password-wrapper">
+                        <input type="email" id="login-email" placeholder="Enter Email" required>
+                    </div>
+                    <div class="password-wrapper">
+                        <input type="password" id="login-password" placeholder="Enter Password" required>
+                        <span class="toggle-password" onclick="togglePasswordVisibility('login-password')">👁️</span>
+                    </div>
+                    <button type="submit" class="auth-btn">Login</button>
+                    <p>Don't have an account? <span onclick="toggleAuth('signup')" class="toggle-link">Sign Up here</span></p>
+                </form>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signup-form-div" class="hidden">
+                <h2>Create an Account</h2>
+                <form id="signup-form">
+                    <input type="text" id="signup-name" placeholder="Full Name" required>
+                    <input type="email" id="signup-email" placeholder="Email Address" required>
+                    <div class="password-wrapper">
+                        <input type="password" id="signup-password" placeholder="Create Password" required>
+                        <span class="toggle-password" onclick="togglePasswordVisibility('signup-password')">👁️</span>
+                    </div>
+                    <button type="submit" class="auth-btn">Sign Up</button>
+                    <p>Already have an account? <span onclick="toggleAuth('login')" class="toggle-link">Login here</span></p>
+                </form>
+            </div>
+            <p id="auth-error" class="hidden error-msg"></p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div id="main-content" class="hidden">
+        <!-- Home Section -->
+        <section id="home">
+            <header>
+                <h1>Explore Our Services</h1>
+                <p>Choose your location and explore available services in your area.</p>
+                
+                <div class="location-picker">
+                    <label for="location-selector">Your Location:</label>
+                    <select id="location-selector" onchange="onLocationChange()">
+                        <option value="All">All Locations</option>
+                        <option value="Hyderabad">Hyderabad</option>
+                        <option value="Secunderabad">Secunderabad</option>
+                        <option value="Kukatpally">Kukatpally</option>
+                        <option value="Kompally">Kompally</option>
+                        <option value="Gachibowli">Gachibowli</option>
+                    </select>
+                </div>
+            </header>
+
+            <div class="services-container">
+                <!-- Cards remain same but opacity will change via JS -->
+                <!-- Maid Services Card -->
+                <div class="service-card" onclick="showSubServices('Maid Services')">
+                    <img src="images/maid.png" alt="Maid Services">
+                    <h3>Maid Services</h3>
+                    <button>View Sub-Services</button>
+                </div>
+                <!-- ... other cards ... -->
+
+                <!-- Home Maintenance Card -->
+                <div class="service-card" onclick="showSubServices('Home Maintenance')">
+                    <img src="images/maintenance.png" alt="Home Maintenance">
+                    <h3>Home Maintenance</h3>
+                    <button>View Sub-Services</button>
+                </div>
+
+                <!-- Appliance Repair Card -->
+                <div class="service-card" onclick="showSubServices('Appliance Repair')">
+                    <img src="images/appliance.png" alt="Appliance Repair">
+                    <h3>Appliance Repair</h3>
+                    <button>View Sub-Services</button>
+                </div>
+
+                <!-- Cleaning Services Card -->
+                <div class="service-card" onclick="showSubServices('Cleaning Services')">
+                    <img src="images/cleaning.png" alt="Cleaning Services">
+                    <h3>Cleaning Services</h3>
+                    <button>View Sub-Services</button>
+                </div>
+
+                <!-- Personal & Lifestyle Card -->
+                <div class="service-card" onclick="showSubServices('Personal & Lifestyle')">
+                    <img src="images/personal.png" alt="Personal & Lifestyle">
+                    <h3>Personal & Lifestyle</h3>
+                    <button>View Sub-Services</button>
+                </div>
+
+                <!-- Vehicle Services Card -->
+                <div class="service-card" onclick="showSubServices('Vehicle Services')">
+                    <img src="images/vehicle.png" alt="Vehicle Services">
+                    <h3>Vehicle Services</h3>
+                    <button>View Sub-Services</button>
+                </div>
+
+                <!-- Event & Occasion Card -->
+                <div class="service-card" onclick="showSubServices('Event & Occasion')">
+                    <img src="images/event.png" alt="Event & Occasion">
+                    <h3>Event & Occasion</h3>
+                    <button>View Sub-Services</button>
+                </div>
+
+                <!-- Outdoor & Utility (New) -->
+                <div class="service-card" onclick="showSubServices('Outdoor & Utility')">
+                    <img src="images/outdoor.png" alt="Outdoor & Utility">
+                    <h3>Outdoor & Utility</h3>
+                    <button>View Sub-Services</button>
+                </div>
+
+                <!-- Safety & Installation (New) -->
+                <div class="service-card" onclick="showSubServices('Safety & Installation')">
+                    <img src="images/safety.png" alt="Safety & Installation">
+                    <h3>Safety & Installation</h3>
+                    <button>View Sub-Services</button>
+                </div>
+
+                <!-- Digital Services (New) -->
+                <div class="service-card" onclick="showSubServices('Digital Services')">
+                    <img src="images/digital.png" alt="Digital Services">
+                    <h3>Digital Services</h3>
+                    <button>View Sub-Services</button>
+                </div>
+
+                <!-- Interior Services (New) -->
+                <div class="service-card" onclick="showSubServices('Interior Services')">
+                    <img src="images/interior.png" alt="Interior Services">
+                    <h3>Interior Services</h3>
+                    <button>View Sub-Services</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Booking Section -->
+        <section id="booking">
+            <div class="booking-form-container">
+                <h2>Complete Your Booking</h2>
+                <form id="booking-form">
+                    <div class="form-group row">
+                        <div>
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" placeholder="Full name" required>
+                        </div>
+                        <div>
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" placeholder="10 Digits" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <textarea id="address" rows="2" placeholder="Full address" required></textarea>
+                    </div>
+
+                    <div class="form-group row">
+                        <div>
+                            <label for="service-type">Main Category</label>
+                            <input type="text" id="service-type" readonly>
+                        </div>
+                        <div>
+                            <label for="sub-service-type">Specific Work</label>
+                            <input type="text" id="sub-service-type" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div>
+                            <label for="expert-name">Service Expert</label>
+                            <input type="text" id="expert-name" readonly placeholder="Select from modal">
+                        </div>
+                        <div>
+                            <label for="booking-location">Service Location</label>
+                            <input type="text" id="booking-location" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div>
+                            <label for="service-price">Total Price (₹)</label>
+                            <input type="text" id="service-price" readonly>
+                        </div>
+                        <div>
+                            <label for="date">Booking Date</label>
+                            <input type="date" id="date" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="confirm-btn">Confirm Booking</button>
+                </form>
+                <p id="success-message" class="hidden">Booking Successful! Check Dashboard.</p>
+                <p id="form-error" class="hidden error-msg"></p>
+            </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard">
+            <h2>Your Dashboard</h2>
+
+            <!-- Updated Stats Container -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <p>Total Bookings</p>
+                    <h3 id="stat-total-bookings">0</h3>
+                </div>
+                <div class="stat-card">
+                    <p>Total Spent</p>
+                    <h3 id="stat-total-spent">₹0</h3>
+                </div>
+                <div class="stat-card">
+                    <p>Top Service</p>
+                    <h3 id="stat-top-service">-</h3>
+                </div>
+                <div class="stat-card">
+                    <p>Top Sub-Service</p>
+                    <h3 id="stat-top-subservice">-</h3>
+                </div>
+            </div>
+
+            <!-- Dashboard Controls -->
+            <div class="dashboard-controls">
+                <input type="text" id="search-input" placeholder="Search service, location or expert..." oninput="displayBookings()">
+                <input type="date" id="filter-date" onchange="displayBookings()">
+                <button class="clear-btn" onclick="clearFilters()">Clear Filters</button>
+            </div>
+
+            <!-- Table -->
+            <div class="table-container">
+                <table id="bookings-table">
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Service Provider</th>
+                            <th>Work & Location</th>
+                            <th>Date</th>
+                            <th>Price</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookings-list">
+                        <!-- Filled by JS -->
+                    </tbody>
+                </table>
+                <p id="no-bookings-msg" class="hidden no-data">No results matching your filters.</p>
+            </div>
+        </section>
+    </div> <!-- End of main-content -->
+
+    <!-- Linking the JavaScript file -->
+    <script src="app.js"></script>
+</body>
+</html>
